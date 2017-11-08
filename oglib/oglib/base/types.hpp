@@ -3,7 +3,8 @@
 #include <inttypes.h>
 #include <vector>
 
-namespace OG {
+namespace OG
+{
   using int8 = int8_t;
   using int16 = int16_t;
   using int32 = int32_t;
@@ -16,4 +17,4 @@ namespace OG {
   using vec3 = ::std::array<float, 3>;
   using vec4 = ::std::array<float, 4>;
   using bytes = ::std::vector<uint8>;
-}
+} // namespace OG

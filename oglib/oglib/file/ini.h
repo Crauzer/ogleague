@@ -4,7 +4,8 @@
 #include <oglib/base/types.hpp>
 #include <optional>
 
-namespace OG::File {
+namespace OG::File
+{
   class Ini : public std::map<uint32, std::string>
   {
   private:
@@ -27,7 +28,7 @@ namespace OG::File {
       return base::find(hash(section, name)) != base::end();
     }
 
-    template<typename T>
+    template <typename T>
     T get(std::string_view section, std::string_view name, T defaultValue = {})
     {
       auto it = base::find(hash(section, name));
@@ -38,4 +39,4 @@ namespace OG::File {
     void readText(std::istream& file);
     void readBin(std::istream& file);
   };
-}
+} // namespace OG::File

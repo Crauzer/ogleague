@@ -3,7 +3,8 @@
 #include <sstream>
 #include <string>
 
-namespace OG {
+namespace OG
+{
   inline void string_as(const std::string& value, std::string& to)
   {
     to = value;
@@ -19,7 +20,7 @@ namespace OG {
     to = std::stoi(value);
   }
 
-  template<size_t SIZE>
+  template <size_t SIZE>
   inline void string_as(const std::string& value, std::array<float, SIZE>& to)
   {
     std::stringstream ss(value);
@@ -27,13 +28,22 @@ namespace OG {
       ss >> v;
   }
 
-  inline std::string as_string(const std::string& value) { return value; }
+  inline std::string as_string(const std::string& value)
+  {
+    return value;
+  }
 
-  inline std::string as_string(int value) { return std::to_string(value); }
+  inline std::string as_string(int value)
+  {
+    return std::to_string(value);
+  }
 
-  inline std::string as_string(float value) { return std::to_string(value); }
+  inline std::string as_string(float value)
+  {
+    return std::to_string(value);
+  }
 
-  template<size_t SIZE>
+  template <size_t SIZE>
   inline std::string as_string(const std::array<float, SIZE>& value)
   {
     std::stringstream ss;
@@ -41,4 +51,4 @@ namespace OG {
       ss << std::to_string(value) << ' ';
     return ss.str();
   }
-}
+} // namespace OG
