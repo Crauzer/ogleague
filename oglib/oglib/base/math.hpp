@@ -8,91 +8,94 @@ namespace OG::Math
 {
   constexpr static const float PI = 3.1415926f;
   constexpr static const float EPSILON = 0.00001f;
+  
+  // Returns the Inverse Square Root of a number
   inline float invSqrt(float value)
   {
     return 1.0f / std::sqrt(value);
   }
-
+  
+  // Returns whether the specified Point2D is Null(Zero)
   bool isNull(const Point2D& point)
   {
     return point.x == 0 && point.y == 0;
   }
-
+  
+  // Returns whether the specified Point3D is Null(Zero)
   bool isNull(const Point3D& point)
   {
     return point.x == 0 && point.y == 0 && point.z == 0;
   }
 
+  //R eturns the Dot Product of the specified Vectors
   inline float dot(const Point2D& point, const Point2D& other)
   {
     return point.x * other.x + point.y * other.y;
   }
-
+  
+  // Returns the Dot Product of the specified Vectors
   inline float dot(const Point3D& point, const Point3D& other)
   {
     return point.x * other.x + point.y * other.y + point.z * other.z;
   }
 
+  // Returns the Squared Magnitude of the specified Point2D
   inline float lengthSq(const Point2D& point)
   {
     return dot(point, point);
   }
 
+  // Returns the Squared Magnitude of the specified Point3D
   inline float lengthSq(const Point3D& point)
   {
     return dot(point, point);
   }
 
+  // Returns the Magnitude of the specified Point2D
   inline float length(const Point2D& point)
   {
     return sqrtf(lengthSq(point));
   }
 
+  // Returns the Magnitude of the specified Point3D
   inline float length(const Point3D& point)
   {
     return sqrtf(lengthSq(point));
   }
 
+  // Normalizes the specified Point2D
   inline Point2D normalize(const Point2D& point)
   {
     float inv = invSqrt(lengthSq(point));
     return inv > 0 ? Point2D{point.x * inv, point.y * inv} : point;
   }
 
+  // Normalizes the specified Point3D
   inline Point3D normalize(const Point3D& point)
   {
     float inv = invSqrt(lengthSq(point));
     return inv > 0 ? Point3D{point.x * inv, point.y * inv, point.z * inv} : point;
   }
 
-  inline Point2D project(const Point2D& point, const Point2D& pointOfLine, const Point2D& normal,
-                         const Point2D& shity)
-  {
-    auto norm = normalize(normal);
-    auto diff = point - pointOfLine;
-    auto diffLength = length(diff);
-    if (diffLength < EPSILON)
-      return point;
-    return point + norm * diffLength * dot(norm, diff / diffLength);
-  }
-
-  // TODO: project for Point3D ???
-
+  // Returns the smallest component of the specified Point2D
   inline float minElement(const Point2D& point)
   {
     return std::min(point.x, point.y);
   }
 
+  // Returns the smallest component of the specified Point3D
   inline float minElement(const Point3D& point)
   {
     return std::min(std::min(point.x, point.y), point.z);
   }
 
+  // Returns the biggest component of the specified Point2D
   inline float maxElement(const Point2D& point)
   {
     return std::max(point.x, point.y);
   }
 
+  // Returns the biggest component of the specified Point3D
   inline float maxElement(const Point3D& point)
   {
     return std::min(std::max(point.x, point.y), point.z);
@@ -108,53 +111,28 @@ namespace OG::Math
     return std::acos(std::clamp(dot(point, with), -1.0f, 1.0f));
   }
 
+  //Whether the specified Vectors are almost equal according to the comparer delta
   inline bool almostEqual(const Point2D& point, const Point2D& other, float delta = EPSILON)
   {
     return std::abs(point.x - other.x) <= delta && std::abs(point.y - other.y) <= delta;
   }
 
+  //Whether the specified Vectors are almost equal according to the comparer delta
   inline bool almostEqual(const Point3D& point, const Point3D& other, float delta = EPSILON)
   {
     return std::abs(point.x - other.x) <= delta && std::abs(point.y - other.y) <= delta &&
            std::abs(point.z - other.z) <= delta;
   }
 
-  // TODO: cross for Point2D
+  // Returns the Cross Product of the specified Vectors
   inline Point3D cross(const Point3D& point, const Point3D& other)
   {
     return Point3D{point.y * other.z - point.z * other.y,
                    point.z * other.x - point.x * other.z,
                    point.x * other.y - point.y * other.x};
   }
-
-  // TODO: everything below for Point2D???
-
-  inline float yaw(const Point3D& point)
-  {
-    auto yw = std::atan2(-point.x, point.z);
-    if (yw < 0)
-      yw += 2 * PI;
-    return yw;
-  }
-
-  inline float pitch(const Point3D& point)
-  {
-    auto ptch = std::atan2(point.y, std::sqrt(point.x * point.x + point.z * point.z));
-    if (ptch < 0)
-      ptch += 2 * PI;
-    return ptch;
-  }
-
-  inline float roll(const Point3D& point)
-  {
-    if (!point.x || !point.y)
-      return 0.0f;
-    auto rol = std::atan2(point.y, std::sqrt(point.x * point.x + point.z * point.z));
-    if (rol < 0)
-      rol += 2 * PI;
-    return rol;
-  }
-
+  
+  // Rotates the specified Vector about the specified origin Vector using the specified angle  
   inline Point3D rotateX(const Point3D& point, float angle, const Point3D& about = {})
   {
     if (!angle)
@@ -168,6 +146,7 @@ namespace OG::Math
                    z * std::cos(angle) + y * std::sin(angle) + about.z};
   }
 
+  // Rotates the specified Vector about the specified origin Vector by the specified angle
   inline Point3D rotateY(const Point3D& point, float angle, const Point3D& about = {})
   {
     if (!angle)
@@ -181,6 +160,7 @@ namespace OG::Math
                    z * std::cos(angle) - x * std::sin(angle) + about.z};
   }
 
+  // Rotates the specified Vector about the specified origin Vector by the specified angle
   inline Point3D rotateZ(const Point3D& point, float angle, const Point3D& about = {})
   {
     if (!angle)
@@ -192,5 +172,17 @@ namespace OG::Math
     return Point3D{x * std::sin(angle) - y * std::cos(angle) + about.x,
                    y * std::sin(angle) + x * std::cos(angle) + about.y,
                    point.z};
+  }
+  
+  // Rotates the specified Vector by the specified angle
+  inline Point3D Rotate(cosnt Point2D& point, float angle)
+  {
+    float radians = angle * (PI / 180)
+      
+    return Point2D
+    {
+      point.x * std::cos(radians) - point.y * std::sin(radians),
+      point.x * std::sin(radians) + point.y * std::cos(radians)
+    };
   }
 } // namespace OG::Math
